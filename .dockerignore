@@ -1,0 +1,5 @@
+go-cache
+.git
+.gitignore
+README.md
+*.test
