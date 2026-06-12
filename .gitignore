@@ -1,0 +1,8 @@
+# Compiled binary
+go-cache
+
+# Go test cache
+*.test
+
+# OS files
+.DS_Store
