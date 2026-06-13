@@ -10,13 +10,23 @@ This project was built as a learning exercise for Go concurrency patterns: race 
 - **TTL expiration** — items auto-expire after a configurable duration
 - **Background cleanup** — a goroutine periodically reaps expired keys
 - **Atomic stats** — hit/miss/set/delete counters using `sync/atomic`
+- **Cookie-based user isolation** — each user gets a unique session cookie; keys are namespaced per user so users cannot access each other's data
 - **HTTP API** — RESTful endpoints using Go 1.22+ enhanced mux (no frameworks)
 - **Graceful shutdown** — handles SIGINT/SIGTERM cleanly
+- **Docker ready** — multi-stage Dockerfile + docker-compose with health checks
 
 ## Quick Start
 
+### Docker (recommended)
+
 ```bash
-# Run the server
+docker-compose up -d
+# API available at http://localhost:5456
+```
+
+### Go
+
+```bash
 cd ~/go-cache
 go run .
 
@@ -25,38 +35,48 @@ go build -o go-cache .
 ./go-cache
 ```
 
-Server starts on `:8080` by default.
+Server starts on `:8080` by default (or `:5456` via Docker).
 
 ## API
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/health` | Health check |
-| `GET` | `/cache` | List all non-expired keys |
+| `GET` | `/cache` | List all non-expired keys **for current user** |
 | `GET` | `/cache/{key}` | Get a value by key |
 | `PUT` | `/cache/{key}` | Set a value (JSON body) |
 | `DELETE` | `/cache/{key}` | Delete a key |
-| `GET` | `/stats` | Cache statistics (hits, misses, hit rate) |
+| `GET` | `/stats` | Cache statistics (hits, misses, hit rate) — global |
+
+### User Isolation (Cookies)
+
+Each user is identified by a `cache_session` cookie (32-char hex ID, HttpOnly, 90-day expiry). Keys are internally namespaced as `user:{id}:{key}`, so:
+
+- User A sets `secret` → User B gets a 404 trying to read it
+- User A lists keys → only sees their own
+- User A deletes a key → does not affect User B's keys with the same name
+
+The cookie is set automatically on the first request. No login required.
 
 ### Examples
 
 ```bash
-# Set a key with 2-minute TTL
-curl -X PUT localhost:8080/cache/greeting \
+# Set a key with 2-minute TTL (cookie is set automatically)
+curl -c cookies.txt -X PUT localhost:5456/cache/greeting \
   -H 'Content-Type: application/json' \
   -d '{"value":"hello world","ttl":"2m"}'
 
-# Get it
-curl localhost:8080/cache/greeting
+# Get it (send the cookie back)
+curl -b cookies.txt localhost:5456/cache/greeting
 
-# List all keys
-curl localhost:8080/cache
+# List your keys
+curl -b cookies.txt localhost:5456/cache
 
-# Check stats
-curl localhost:8080/stats
+# Check global stats
+curl localhost:5456/stats
 
 # Delete
-curl -X DELETE localhost:8080/cache/greeting
+curl -b cookies.txt -X DELETE localhost:5456/cache/greeting
 ```
 
 ### PUT Body Format
@@ -79,7 +99,6 @@ All via environment variables:
 | `PORT` | `8080` | HTTP server port |
 | `CLEANUP_INTERVAL` | `10s` | How often the reaper runs |
 | `MAX_KEYS` | `0` (unlimited) | Max number of keys in cache |
-| `DEFAULT_TTL` | `5m` | Default TTL if not specified |
 
 ```bash
 PORT=3000 MAX_KEYS=1000 CLEANUP_INTERVAL=30s ./go-cache
@@ -96,20 +115,28 @@ go test -race -v ./...
 
 # Run only the race condition stress tests
 go test -race -run TestRace -v ./...
+
+# Run only the cookie isolation tests
+go test -race -run TestCookie -v ./...
 ```
 
 ## Project Structure
 
 ```
 go-cache/
-├── main.go          # Entry point, HTTP server, graceful shutdown
-├── store.go         # Core cache — RWMutex + map (the concurrency heart)
-├── item.go          # CacheItem struct with TTL logic
-├── stats.go         # Atomic counters for cache metrics
-├── cleanup.go       # Background TTL reaper goroutine
-├── handler.go       # HTTP handlers (Go 1.22+ enhanced mux)
-├── store_test.go    # 9 tests: 4 unit + 5 race condition stress tests
-└── go.mod           # Module definition (zero external deps)
+├── main.go              # Entry point, HTTP server, graceful shutdown
+├── store.go             # Core cache — RWMutex + map (the concurrency heart)
+├── item.go              # CacheItem struct with TTL logic
+├── stats.go             # Atomic counters for cache metrics
+├── cleanup.go           # Background TTL reaper goroutine
+├── auth.go              # Cookie-based user ID + key namespacing
+├── handler.go           # HTTP handlers (Go 1.22+ enhanced mux)
+├── store_test.go        # Race condition stress tests
+├── auth_test.go         # Cookie isolation tests
+├── Dockerfile           # Multi-stage build (Go alpine → alpine runtime)
+├── docker-compose.yml   # Docker Compose with health check
+├── .dockerignore        # Build context filter
+└── go.mod               # Module definition (zero external deps)
 ```
 
 ## Race Condition Hotspots
