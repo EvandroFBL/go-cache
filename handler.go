@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -48,7 +49,10 @@ func (h *Handler) handleGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	value, found := h.store.Get(key)
+	userID := GetOrCreateUserID(w, r)
+	nsKey := namespacedKey(userID, key)
+
+	value, found := h.store.Get(nsKey)
 	if !found {
 		jsonError(w, http.StatusNotFound, "not_found", "key not found or expired")
 		return
@@ -96,7 +100,10 @@ func (h *Handler) handleSet(w http.ResponseWriter, r *http.Request) {
 		ttl = parsed
 	}
 
-	if err := h.store.Set(key, req.Value, ttl); err != nil {
+	userID := GetOrCreateUserID(w, r)
+	nsKey := namespacedKey(userID, key)
+
+	if err := h.store.Set(nsKey, req.Value, ttl); err != nil {
 		jsonError(w, http.StatusConflict, "cache_full", err.Error())
 		return
 	}
@@ -118,7 +125,10 @@ func (h *Handler) handleDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deleted := h.store.Delete(key)
+	userID := GetOrCreateUserID(w, r)
+	nsKey := namespacedKey(userID, key)
+
+	deleted := h.store.Delete(nsKey)
 	if !deleted {
 		jsonError(w, http.StatusNotFound, "not_found", "key not found")
 		return
@@ -131,17 +141,30 @@ func (h *Handler) handleDelete(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// GET /cache — list all non-expired keys
+// GET /cache — list all non-expired keys for the current user
 func (h *Handler) handleKeys(w http.ResponseWriter, r *http.Request) {
-	keys := h.store.Keys()
+	userID := GetOrCreateUserID(w, r)
+	prefix := "user:" + userID + ":"
+
+	allKeys := h.store.Keys()
+
+	// Filter to only this user's keys and strip the prefix
+	keys := make([]string, 0)
+	for _, k := range allKeys {
+		if strings.HasPrefix(k, prefix) {
+			keys = append(keys, strings.TrimPrefix(k, prefix))
+		}
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]any{
-		"keys":  keys,
-		"count": len(keys),
+		"keys":   keys,
+		"count":  len(keys),
+		"userID": userID,
 	})
 }
 
-// GET /stats — cache statistics
+// GET /stats — cache statistics (global, not per-user)
 func (h *Handler) handleStats(w http.ResponseWriter, r *http.Request) {
 	snap := h.store.stats.Snapshot()
 	total := snap.Hits + snap.Misses

@@ -16,19 +16,13 @@ func main() {
 	port := getEnv("PORT", "8080")
 	cleanupInterval := getEnvDuration("CLEANUP_INTERVAL", 10*time.Second)
 	maxKeys := getEnvInt("MAX_KEYS", 0) // 0 = unlimited
-	defaultTTL := getEnvDuration("DEFAULT_TTL", 5*time.Minute)
 
 	log.Printf("Starting go-cache on :%s", port)
 	log.Printf("  Cleanup interval: %v", cleanupInterval)
 	log.Printf("  Max keys: %d (0=unlimited)", maxKeys)
-	log.Printf("  Default TTL: %v", defaultTTL)
 
 	// Create the store
 	store := NewStore(maxKeys)
-
-	// Seed some example data
-	store.Set("hello", "world", 1*time.Minute)
-	store.Set("counter", 42, 30*time.Second)
 
 	// Start background cleanup goroutine
 	ctx, cancel := context.WithCancel(context.Background())
