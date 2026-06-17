@@ -1,0 +1,203 @@
+%-------------------------
+% Resume in LaTeX
+% Author: Evandro Lima
+% License: MIT
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+
+%---------- Page Setup ----------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+%---------- Section Formatting ----------
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+%---------- Custom Commands ----------
+\newcommand{\resumeItem}[2]{
+  \item\small{
+    \textbf{#1}{: #2 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubItem}[2]{\resumeItem{#1}{#2}\vspace{-4pt}}
+
+\renewcommand{\labelitemii}{$\circ$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=*]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%======================================
+%   DOCUMENT
+%======================================
+\begin{document}
+
+%---------- Header ----------
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+  \textbf{\href{https://linkedin.com/in/evandrofbl}{\Large Evandro Lima}} & \href{mailto:evandrofbl@gmail.com}{evandrofbl@gmail.com} \\
+  \href{https://github.com/EvandroFBL}{github.com/EvandroFBL} & Po\c{c}os de Caldas, MG, Brazil \\
+  \href{https://linkedin.com/in/evandrofbl}{linkedin.com/in/evandrofbl} & Open to remote / relocation \\
+\end{tabular*}
+
+%---------- Summary ----------
+\section{Summary}
+\small{Backend-focused Software Developer with 6+ years of experience building scalable systems and APIs using TypeScript, Node.js, and automated testing. Strong foundation in unit testing, CI/CD pipelines, and test-driven development. Passionate about AI-powered development tools and generative AI for code quality — actively exploring how AI can accelerate test generation, improve coverage, and enhance developer workflows. Fast learner who thrives in rapidly evolving technology landscapes.}
+
+%---------- Skills ----------
+\section{Technical Skills}
+\begin{itemize}[leftmargin=*, label={}]
+  \small{
+    \item \textbf{Languages}{: TypeScript, JavaScript, Go, SQL}
+    \item \textbf{Backend}{: Node.js, Fastify, Express, REST API Design}
+    \item \textbf{Testing}{: Vitest, Supertest, TDD, Unit Testing, Integration Testing, Test Coverage Analysis}
+    \item \textbf{AI Skills}{: AI-powered test generation, Agentic coding, Prompt Engineering}
+    \item \textbf{Databases}{: PostgreSQL, SQL Server, Redis, Drizzle ORM}
+    \item \textbf{DevOps}{: Docker, Docker Compose, GitHub Actions (CI/CD), Linux Administration}
+    \item \textbf{Validation}{: Zod, Environment Hardening, Input Validation}
+    \item \textbf{Tools}{: Git, AzureDevOps, Insomnia, Apidog, Agile/Scrum}
+  }
+\end{itemize}
+
+%---------- Experience ----------
+\section{Experience}
+\resumeSubHeadingListStart
+
+  \resumeSubheading
+    {Expresso Nepomuceno S/A}{Lavras, MG}
+    {Senior Software Engineer}{Sep 2025 -- Present}
+  \resumeItemListStart
+    \resumeItem{ERP Development}{Designed and implemented custom solutions within TOTVS Protheus ERP to extend core functionality across back-office, maintenance, and supply chain modules.}
+    \resumeItem{APIs \& Integrations}{Developed custom reports, APIs, and workflows tailored to business requirements, ensuring seamless integration with existing solutions and client systems.}
+    \resumeItem{Optimization}{Optimized ERP processes and custom modules to improve operational efficiency across multiple business areas.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {Expresso Nepomuceno S/A}{Lavras, MG}
+    {Mid-Level Software Engineer}{Nov 2021 -- Sep 2025}
+  \resumeItemListStart
+    \resumeItem{Custom Solutions}{Developed and maintained custom ERP solutions, reports, and integrations within TOTVS Protheus for back-office and supply chain operations.}
+    \resumeItem{Business Analysis}{Translated business requirements into technical specifications and delivered tailored solutions for internal stakeholders.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {Expresso Nepomuceno S/A}{Lavras, MG}
+    {Junior Software Engineer}{Feb 2020 -- Nov 2021}
+  \resumeItemListStart
+    \resumeItem{ERP Support}{Provided support and development for TOTVS Protheus ERP modules, including bug fixes, customizations, and report generation.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {Expresso Nepomuceno S/A}{Lavras, MG}
+    {Administrative Assistant}{Jun 2019 -- Feb 2020}
+  \resumeItemListStart
+    \resumeItem{Operations}{Supported administrative and IT operations, contributing to process improvements and system adoption.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {Nishimaru Inform\'atica}{Po\c{c}os de Caldas, MG}
+    {Support Analyst}{Feb 2018 -- Oct 2018}
+  \resumeItemListStart
+    \resumeItem{IT Infrastructure}{Maintenance of desktops and notebooks, outsourced technical support for IT administration including networks, servers, and services.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {Freitas Software}{Po\c{c}os de Caldas, MG}
+    {Programming Assistant}{Jun 2017 -- Feb 2018}
+  \resumeItemListStart
+    \resumeItem{Development}{DataFlex development of applications for commerce, health plans, and hospitals. Maintenance and creation of reports and customized applications.}
+  \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%---------- Projects ----------
+\section{Featured Projects}
+
+\resumeSubHeadingListStart
+
+  \resumeSubheading
+    {Currency Exchange API}{}
+    {Node.js $\cdot$ TypeScript $\cdot$ Fastify $\cdot$ PostgreSQL $\cdot$ Redis}{\href{https://github.com/EvandroFBL/currency-exchange-api}{GitHub}}
+  \resumeItemListStart
+    \resumeItem{Architecture}{Production-grade REST API for real-time fiat and cryptocurrency exchange rates with smart conversion engine (direct, inverse, and cross-rate calculations via USD).}
+    \resumeItem{Testing}{Full test suite with Vitest — 18 unit and integration tests, TDD methodology, high coverage across all endpoints and business logic.}
+    \resumeItem{Caching}{Redis caching with differentiated TTL strategies — 5min for fiat rates, 1min for crypto prices — reducing external API calls by \~90\%.}
+    \resumeItem{CI/CD}{GitHub Actions pipeline with automated test execution and Docker image builds on every push.}
+    \resumeItem{Data Layer}{Drizzle ORM with PostgreSQL 16 for type-safe queries, migration management, and conversion history audit trail.}
+  \resumeItemListEnd
+
+  \resumeSubheading
+    {Go Cache}{}
+    {Go $\cdot$ Concurrency $\cdot$ HTTP API}{\href{https://github.com/EvandroFBL/go-cache}{GitHub}}
+  \resumeItemListStart
+    \resumeItem{Concurrency}{In-memory key-value cache with TTL, built from scratch in Go — thread-safe store using \texttt{sync.RWMutex}, atomic stats counters, and background TTL reaper goroutine.}
+    \resumeItem{Testing}{14 tests including 5 race condition stress tests validated with Go's \texttt{-race} detector. Cookie-based per-user key isolation.}
+  \resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%---------- Education ----------
+\section{Education}
+\resumeSubHeadingListStart
+  \resumeSubheading
+    {Federal University of Lavras (UFLA)}{Lavras, MG}
+    {Bachelor's Degree in Computer Science}{Mar 2010 -- Dec 2015}
+\resumeSubHeadingListEnd
+
+%---------- Certifications ----------
+\section{Certifications}
+\begin{itemize}[leftmargin=*, label={}]
+  \small{
+    \item \textbf{EF SET English Certificate}{: C2 Proficient}
+  }
+\end{itemize}
+
+%---------- Languages ----------
+\section{Languages}
+\begin{itemize}[leftmargin=*, label={}]
+  \small{
+    \item \textbf{Portuguese}{: Native}
+    \item \textbf{English}{: Full Professional (C2 Proficient — EF SET Certified)}
+  }
+\end{itemize}
+
+\end{document}
